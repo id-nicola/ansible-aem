@@ -1,0 +1,9 @@
+---
+java_version: 8
+jdk_version: 1.8.0
+jdk_update: 66
+jdk_build: 17
+jdk_dir_name: "jdk{{jdk_version}}_{{jdk_update}}"
+jdk_version_short_notation: "{{java_version}}u{{jdk_update}}"
+jdk_tar_name: "jdk-{{jdk_version_short_notation}}-linux-x64"
+download_url: "http://download.oracle.com/otn-pub/java/jdk/{{jdk_version_short_notation}}-b{{jdk_build}}/{{jdk_tar_name}}.tar.gz"

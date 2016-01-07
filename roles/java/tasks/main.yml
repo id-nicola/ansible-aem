@@ -1,0 +1,73 @@
+---
+- name: Install required packages
+  yum: name={{item}} state=latest
+  with_items:
+    - wget
+    - libselinux-python
+
+- name: Download Java to destination location
+  command: "wget -q --no-check-certificate --no-cookies --header 'Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie' {{download_url}}"
+  args:
+    chdir: /opt/
+    creates: "{{jdk_tar_name}}.tar.gz"
+  tags:
+    - download_java
+
+- name: Untar/GZip Java file
+  command: "tar xzf {{jdk_tar_name}}.tar.gz"
+  args:
+    chdir: /opt/
+    creates: "{{jdk_dir_name}}/"
+  tags:
+    - untargz_java
+
+- name: Install Java using Alternatives
+  command: "alternatives --install /usr/bin/java java /opt/{{jdk_dir_name}}/bin/java 2"
+  args:
+    chdir: "/opt/{{jdk_dir_name}}/"
+  tags:
+    - alternatives_install_java
+
+- name: Configure default Java using Alternatives
+  command: "alternatives --set java /opt/{{jdk_dir_name}}/bin/java"
+  args: 
+    chdir: "/opt/{{jdk_dir_name}}/"
+  tags:
+    - alternatives_configure_java
+
+- name: Install Jar using Alternatives
+  command: "alternatives --install /usr/bin/jar jar /opt/{{jdk_dir_name}}/bin/jar 2"
+  args: 
+    chdir: "/opt/{{jdk_dir_name}}/"
+  tags:
+    - alternatives_install_jar
+
+- name: Configure default Jar using Alternatives
+  command: "alternatives --set jar /opt/{{jdk_dir_name}}/bin/jar"
+  args:
+    chdir: "/opt/{{jdk_dir_name}}/"
+  tags: 
+    - alternatives_configure_jar
+
+- name: Install Javac using Alternatives
+  command: "alternatives --install /usr/bin/javac javac /opt/{{jdk_dir_name}}/bin/javac 2"
+  args: 
+    chdir: "/opt/{{jdk_dir_name}}/"
+  tags:
+    - alternatives_install_javac
+
+- name: Configure default Javac using Alternatives
+  command: "alternatives --set javac /opt/{{jdk_dir_name}}/bin/javac"
+  args:
+    chdir: "/opt/{{jdk_dir_name}}/"
+  tags: 
+    - alternatives_configure_javac
+
+- name: Set JAVA_HOME
+  lineinfile:
+    dest: /etc/environment
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^JAVA_HOME', line: 'JAVA_HOME=/opt/{{jdk_dir_name}}' }
+    - { regexp: '^JRE_HOME', line: 'JRE_HOME=/opt/{{jdk_dir_name}}/jre'}

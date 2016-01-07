@@ -1,0 +1,98 @@
+---
+- name: Create AEM home folders
+  command: "mkdir -p {{aem_mode_home_path}}"
+  register: create_aem_home
+  tags:
+    - create_aem_home
+
+- name: Upload AEM jar to installation location
+  when: create_aem_home|success
+  copy: src={{aem_files_jar_path}} dest="{{aem_mode_home_path}}/{{aem_jar_path}}"
+  register: upload_aem_jar
+  tags:
+    - upload_aem_jar
+
+- name: Upload AEM license to installation location
+  when: upload_aem_jar|success
+  copy: src={{aem_license_path}} dest={{aem_mode_home_path}}
+  register: upload_aem_license
+  tags:
+    - upload_aem_license
+
+- name: Unpack jar with -unpack option
+  when: upload_aem_license|success
+  command: "java -jar {{aem_jar_name}} -unpack"
+  args:
+    chdir: "{{aem_mode_home_path}}"
+  register: unpack_aem_jar
+  tags:
+    - unpack_aem_jar
+
+- name: Remove init default script
+  when: unpack_aem_jar|success
+  file:
+    path="{{aem_mode_home_path}}crx-quickstart/bin/start"
+    state=absent
+  register: remove_default_init
+  tags:
+    - remove_default_init
+
+- name: Create configured init script
+  when: remove_default_init|success
+  template:
+    src=start.j2
+    dest="{{aem_mode_home_path}}crx-quickstart/bin/start"
+    mode=775
+  register: create_init_configuration
+  tags:
+    - create_init_configuration
+
+- name: Create start scirpt
+  when: create_init_configuration|success
+  template:
+    src=aem-author.j2
+    dest="/etc/init.d/aem-{{aem_mode}}"
+    mode=775
+  register: create_start_script
+  tags:
+    - create_start_script
+
+- name: Create AEM Linux user
+  when: create_start_script|success
+  user: 
+    name={{ aem_user }}
+    state=present
+    groups="root"
+  register: create_aem_linux_user
+
+- name: Set appropriate permissions and ownership on AEM directory struture
+  when: create_aem_linux_user|success
+  file: 
+    path=/srv 
+    recurse=yes 
+    state=directory 
+    owner="{{ aem_user }}" 
+    group=root
+  sudo: yes
+  sudo_user: root
+  register: set_permissions
+
+- name: chkconfig AEM as a service 
+  when: set_permissions|success
+  command: "chkconfig 'aem-{{aem_mode}}' on"
+  register: chkconfig_aem
+
+- name: Start AEM for the first time
+  when: chkconfig_aem|success
+  service: name="aem-{{aem_mode}}" state=started
+
+- name: Make sure that AEM has started
+  wait_for: timeout=1800 path=/srv/aem/author/crx-quickstart/logs/error.log search_regex='Startup finished'
+
+- name: Upload SP3 package
+  copy: src={{aem_package_zip}} dest="/srv/aem/{{aem_package_zip}}"
+
+- name: Install AEM 6.0 Service Pack 3 - SP3
+  command: "curl -u {{aem_sling_username}}:{{aem_sling_password}} -F 'file=@/srv/aem/{{aem_package_zip}}' -F 'name={{aem_package_name}}' -F force=true -F install=true 'http://localhost:{{aem_port}}/crx/packmgr/service.jsp'"
+  tags:
+    - install_sp3_package

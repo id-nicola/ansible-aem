@@ -1,0 +1,26 @@
+---
+# AEM General variables
+aem_mode: author
+aem_home_path: /srv/aem/
+aem_port: 4502
+aem_sling_username: admin
+aem_sling_password: admin
+aem_files_jar_path: aem-author-4502.jar
+aem_license_path: "license.properties"
+aem_package_zip: AEM_6.0_Service_Pack_3-6.0.SP3.zip
+aem_package_name: aem-service-pkg-wrapper
+
+# AEM Java startup variables
+cq_memory: 3172
+cq_jarfile: app/cq-quickstart-6.0.0-standalone.jar
+
+# AEM Linux user
+aem_user: aem
+
+aem_jar_name: "aem-{{aem_mode}}-p{{aem_port}}.jar"
+aem_jar_path: "{{aem_jar_name}}"
+aem_mode_home_path: "{{aem_home_path}}{{aem_mode}}/"
+
+
+
+

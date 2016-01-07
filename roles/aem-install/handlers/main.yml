@@ -1,0 +1,3 @@
+---
+- name: Start AEM
+  service: name="aem-{{aem_mode}}" state=started
