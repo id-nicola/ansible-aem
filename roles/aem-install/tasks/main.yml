@@ -95,6 +95,6 @@
 
 - name: Install AEM 6.0 Service Pack 3 - SP3
   command: "curl -u {{aem_sling_username}}:{{aem_sling_password}} -F 'file=@/srv/aem/{{item.key.zip}}' -F 'name={{item.key.name}}' -F force=true -F install=true 'http://localhost:{{aem_port}}/crx/packmgr/service.jsp'"
-  with_items: "{{aem_package_zips-names}}"
+  with_dict: "{{aem_package_zips-names}}"
   tags:
     - install_sp3_package
