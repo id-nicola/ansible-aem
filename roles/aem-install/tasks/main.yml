@@ -89,17 +89,18 @@
 - name: Make sure that AEM has started
   wait_for: timeout=1800 path=/srv/aem/author/crx-quickstart/logs/error.log search_regex='Startup finished'
 
-- name: Upload SP3 package
+- name: Upload AEM package(s)
   copy: src={{ item.0 }} dest="/srv/aem/{{ item.0 }}"
   with_together:
     - "{{aem_package_zips}}"
     - "{{aem_package_names}}"
+  tags:
+    - upload_packages
 
-- name: Install AEM 6.0 Service Pack 3 - SP3
+- name: Install AEM package(s)
   command: "curl -u {{aem_sling_username}}:{{aem_sling_password}} -F 'file=@/srv/aem/{{item.0}}' -F 'name={{item.1}}' -F force=true -F install=true 'http://localhost:{{aem_port}}/crx/packmgr/service.jsp'"
   with_together:
     - "{{aem_package_zips}}"
     - "{{aem_package_names}}"
-
   tags:
-    - install_sp3_package
+    - install_packages
