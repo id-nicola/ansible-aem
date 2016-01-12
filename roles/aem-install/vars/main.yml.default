@@ -9,7 +9,7 @@ aem_files_jar_path: aem-author-4502.jar
 aem_license_path: "license.properties"
 
 #AEM 6.0
-aem_package_zips-names: [{zip: 'AEM_6.0_Service_Pack_3-6.0.SP3.zip', name: 'aem-service-pkg-wrapper'}]
+aem_package_zips-names: [{zip: 'cq-6.1.0-hotfix-6449-1.2', name: 'aem-service-pkg-wrapper'}]
 cq_jarfile: app/cq-quickstart-6.0.0-standalone.jar
 
 #AEM 6.1
