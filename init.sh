@@ -8,6 +8,10 @@ echo $CURR_DIR
 sudo chmod 775 $CURR_DIR/get_packages-6_0.sh
 sudo chmod 775 $CURR_DIR/get_packages-6_1.sh
 
+cp $CURR_DIR/playbook.yml.default ansible-aem/playbook.yml
+cp $CURR_DIR/roles/aem-install/vars/main.yml.default ansible-aem/roles/aem-install/vars/main.yml
+cp $CURR_DIR/roles/java/vars/main.yml.default ansible-aem/roles/java/vars/main.yml
+
 PS3='Install AEM version : '
 options=("AEM 6.0 [1]" "AEM 6.1 [2]" "Quit [3]")
 select opt in "${options[@]}"
@@ -27,7 +31,3 @@ do
         *) echo Invalid option;;
     esac
 done
-
-cp $CURR_DIR/playbook.yml.default ansible-aem/playbook.yml
-cp $CURR_DIR/roles/aem-install/vars/main.yml.default ansible-aem/roles/aem-install/vars/main.yml
-cp $CURR_DIR/roles/java/vars/main.yml.default ansible-aem/roles/java/vars/main.yml
