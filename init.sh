@@ -19,6 +19,10 @@ do
     case $opt in
         "AEM 6.0 [1]")
             exec $CURR_DIR/get_packages-6_0.sh
+            echo "#AEM 6.0" >> roles/aem-install/vars/main.yml
+            echo "aem_package_zips: ['AEM-6.0-Service-Pack-3-6.0.SP3.zip']" >> roles/aem-install/vars/main.yml
+            echo "aem_package_names: ['aem-service-pkg-wrapper']" >> roles/aem-install/vars/main.yml
+            echo "cq_jarfile: app/cq-quickstart-6.0.0-standalone.jar" >> roles/aem-install/vars/main.yml
             break
         ;;
         "AEM 6.1 [2]")
