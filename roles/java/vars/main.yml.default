@@ -7,3 +7,4 @@ jdk_dir_name: "jdk{{jdk_version}}_{{jdk_update}}"
 jdk_version_short_notation: "{{java_version}}u{{jdk_update}}"
 jdk_tar_name: "jdk-{{jdk_version_short_notation}}-linux-x64"
 download_url: "http://download.oracle.com/otn-pub/java/jdk/{{jdk_version_short_notation}}-b{{jdk_build}}/{{jdk_tar_name}}.tar.gz"
+http://download.oracle.com/otn/java/jdk/7u80-b15/jre-7u80-linux-x64.tar.gz?AuthParam=1453747225_59dbd8954f2192e71196dc85d2546e4a

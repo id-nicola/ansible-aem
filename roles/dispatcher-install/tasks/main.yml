@@ -14,9 +14,9 @@
     - download_dispatcher
 
 - name: Untar/GZip Dispatcher file
-  command: "tar xzf {{jdk_tar_name}}.tar.gz"
+  command: "tar xzf {{dispatcher_tar_name}}.tar.gz"
   args:
     chdir: /opt/
-    creates: "{{jdk_dir_name}}/"
+    creates: "{{dispatcher_dir_name}}/"
   tags:
     - untargz_dispatcher
