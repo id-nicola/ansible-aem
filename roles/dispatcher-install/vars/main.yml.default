@@ -1,0 +1,7 @@
+---
+java_version: 8
+dispatcher_version: 4.1.11
+apache_version: 2.4
+architecture: 64
+dispatcher_tar_name: dispatcher.tar.gz
+download_url: "https://www.adobeaemcloud.com/content/companies/public/adobe/dispatcher/dispatcher/_jcr_content/top/download_10/file.res/dispatcher-apache{{apache_version}}-linux-x86-{{architecture}}-{{dispatcher_version}}.tar.gz"
