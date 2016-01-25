@@ -18,8 +18,12 @@ select opt in "${options[@]}"
 do
     case $opt in
         "Dispatcher [1]")
+            echo "Dispatcher"
+            break;
         ;;
         "AEM 5.6 [2]")
+            echo "AEM 5.6"
+            break;
         ;;
         "AEM 6.0 [3]")
             echo "" >> $CURR_DIR/roles/aem-install/vars/main.yml;
