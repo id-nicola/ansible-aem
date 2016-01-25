@@ -87,7 +87,7 @@
   service: name="aem-{{aem_mode}}" state=started
 
 - name: Make sure that AEM has started
-  wait_for: timeout=1800 path=/srv/aem/author/crx-quickstart/logs/error.log search_regex='Startup finished'
+  wait_for: timeout=1800 "path=/srv/aem/{{aem_mode}}/crx-quickstart/logs/error.log search_regex='Startup finished'"
 
 - name: Upload AEM package(s)
   copy: src={{ item.0 }} dest="/srv/aem/{{ item.0 }}"
